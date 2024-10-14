@@ -100,7 +100,6 @@ const Live = ({ canvasRef, undo, redo }: Props) => {
     );
   });
 
-  // Listen to keyboard events to change the cursor state
   useEffect(() => {
     const onKeyUp = (e: KeyboardEvent) => {
       if (e.key === "/") {
@@ -132,17 +131,14 @@ const Live = ({ canvasRef, undo, redo }: Props) => {
     };
   }, [updateMyPresence]);
 
-  // Listen to mouse events to change the cursor state
   const handlePointerMove = useCallback((event: React.PointerEvent) => {
     event.preventDefault();
 
-    // if cursor is not in reaction selector mode, update the cursor position
     if (cursor == null || cursorState.mode !== CursorMode.ReactionSelector) {
-      // get the cursor position in the canvas
+
       const x = event.clientX - event.currentTarget.getBoundingClientRect().x;
       const y = event.clientY - event.currentTarget.getBoundingClientRect().y;
 
-      // broadcast the cursor position to other users
       updateMyPresence({
         cursor: {
           x,
@@ -152,7 +148,6 @@ const Live = ({ canvasRef, undo, redo }: Props) => {
     }
   }, []);
 
-  // Hide the cursor when the mouse leaves the canvas
   const handlePointerLeave = useCallback(() => {
     setCursorState({
       mode: CursorMode.Hidden,
@@ -163,10 +158,8 @@ const Live = ({ canvasRef, undo, redo }: Props) => {
     });
   }, []);
 
-  // Show the cursor when the mouse enters the canvas
   const handlePointerDown = useCallback(
     (event: React.PointerEvent) => {
-      // get the cursor position in the canvas
       const x = event.clientX - event.currentTarget.getBoundingClientRect().x;
       const y = event.clientY - event.currentTarget.getBoundingClientRect().y;
 
@@ -177,7 +170,6 @@ const Live = ({ canvasRef, undo, redo }: Props) => {
         },
       });
 
-      // if cursor is in reaction mode, set isPressed to true
       setCursorState((state: CursorState) =>
         cursorState.mode === CursorMode.Reaction ? { ...state, isPressed: true } : state
       );
@@ -185,14 +177,12 @@ const Live = ({ canvasRef, undo, redo }: Props) => {
     [cursorState.mode, setCursorState]
   );
 
-  // hide the cursor when the mouse is up
   const handlePointerUp = useCallback(() => {
     setCursorState((state: CursorState) =>
       cursorState.mode === CursorMode.Reaction ? { ...state, isPressed: false } : state
     );
   }, [cursorState.mode, setCursorState]);
 
-  // trigger respective actions when the user clicks on the right menu
   const handleContextMenuClick = useCallback((key: string) => {
     switch (key) {
       case "Chat":
@@ -234,8 +224,6 @@ const Live = ({ canvasRef, undo, redo }: Props) => {
         onPointerUp={handlePointerUp}
       >
         <canvas ref={canvasRef} />
-
-        {/* Render the reactions */}
         {reactions.map((reaction) => (
           <FlyingReaction
             key={reaction.timestamp.toString()}
@@ -245,8 +233,6 @@ const Live = ({ canvasRef, undo, redo }: Props) => {
             value={reaction.value}
           />
         ))}
-
-        {/* If cursor is in chat mode, show the chat cursor */}
         {cursor && (
           <CursorChat
             cursor={cursor}
@@ -255,8 +241,6 @@ const Live = ({ canvasRef, undo, redo }: Props) => {
             updateMyPresence={updateMyPresence}
           />
         )}
-
-        {/* If cursor is in reaction selector mode, show the reaction selector */}
         {cursorState.mode === CursorMode.ReactionSelector && (
           <ReactionSelector
             setReaction={(reaction) => {
@@ -264,11 +248,7 @@ const Live = ({ canvasRef, undo, redo }: Props) => {
             }}
           />
         )}
-
-        {/* Show the live cursors of other users */}
         <LiveCursors others={others} />
-
-        {/* Show the comments */}
         <Comments />
       </ContextMenuTrigger>
 

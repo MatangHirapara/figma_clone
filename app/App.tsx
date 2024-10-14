@@ -494,7 +494,6 @@ const Home = () => {
         imageInputRef={imageInputRef}
         activeElement={activeElement}
         handleImageUpload={(e: any) => {
-          // prevent the default behavior of the input element
           e.stopPropagation();
 
           handleImageUpload({
