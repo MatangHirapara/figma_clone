@@ -98,6 +98,48 @@ export const getShapeInfo = (shapeType: string) => {
   }
 };
 
+export const exportToJpg = () => {
+  const canvas = document.querySelector("canvas");
+
+  if (!canvas) return;
+
+  // Get the canvas data URL in JPG format
+  const data = canvas.toDataURL("image/jpeg", 1.0); // The second parameter is the quality (0.0 to 1.0)
+
+  // Create a link element
+  const link = document.createElement("a");
+  link.href = data;
+  link.download = "canvas.jpg"; // Set the file name for the download
+
+  // Programmatically click the link to trigger the download
+  document.body.appendChild(link);
+  link.click();
+
+  // Clean up and remove the link
+  document.body.removeChild(link);
+};
+
+export const exportToPng = () => {
+  const canvas = document.querySelector("canvas");
+
+  if (!canvas) return;
+
+  // Get the canvas data URL in PNG format
+  const data = canvas.toDataURL("image/png");
+
+  // Create a link element
+  const link = document.createElement("a");
+  link.href = data;
+  link.download = "canvas.png"; // Set the file name for the download
+
+  // Programmatically click the link to trigger the download
+  document.body.appendChild(link);
+  link.click();
+
+  // Clean up and remove the link
+  document.body.removeChild(link);
+};
+
 export const exportToPdf = () => {
   const canvas = document.querySelector("canvas");
 
